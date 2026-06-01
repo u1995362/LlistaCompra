@@ -1,0 +1,69 @@
+<div class="app-shell">
+  <div class="card">
+    <h1>Lista de la compra</h1>
+    <p class="subtitle">Añade productos, márcalos como comprados y guárdalos en el navegador.</p>
+
+    <form class="form" (ngSubmit)="addItem()">
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="newName"
+        placeholder="Ej. Leche"
+        autocomplete="off"
+      />
+
+      <input
+        type="number"
+        name="quantity"
+        [(ngModel)]="newQuantity"
+        min="1"
+      />
+
+      <button type="submit">Añadir</button>
+    </form>
+
+    <div class="summary">
+      <span>Total: {{ items().length }}</span>
+      <span>Comprados: {{ boughtCount() }}</span>
+    </div>
+
+    <ul class="list" *ngIf="items().length > 0; else emptyState">
+      <li
+        class="item"
+        *ngFor="let item of items()"
+        [class.bought]="item.bought"
+      >
+        <label class="item-main">
+          <input
+            type="checkbox"
+            [checked]="item.bought"
+            (change)="toggleBought(item.id)"
+          />
+          <span class="item-text">
+            {{ item.name }}
+            <small>x{{ item.quantity }}</small>
+          </span>
+        </label>
+
+        <button class="delete" type="button" (click)="removeItem(item.id)">
+          Borrar
+        </button>
+      </li>
+    </ul>
+
+    <ng-template #emptyState>
+      <div class="empty">
+        No hay productos todavía. Añade el primero arriba.
+      </div>
+    </ng-template>
+
+    <div class="footer-actions" *ngIf="items().length > 0">
+      <button type="button" class="secondary" (click)="clearBought()">
+        Borrar comprados
+      </button>
+      <button type="button" class="secondary danger" (click)="clearAll()">
+        Vaciar lista
+      </button>
+    </div>
+  </div>
+</div>
